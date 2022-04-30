@@ -4,7 +4,7 @@ Dynamically generates IAM policies based on input variables, and generates an IA
 # Example Usage
 ```hcl
 module "this" {
-  source = "git::git@github.com:wiley/do-infrastructure-modules.git//cloud/aws/wes-generateIAMRole?ref=<module-version-here>" 
+  source = "git::git@github.com:thevanguardian/generateIamRole.git/?ref=<module-version-here>" 
   roleName = "AccessEKSMacGuffin" # Required
   rolePath = "/k8s/users/" # Required
   maxSessionDuration = "7200" # Optional

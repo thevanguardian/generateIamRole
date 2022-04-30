@@ -41,3 +41,9 @@ variable "maxSessionDuration" {
   description = "maxSessionDuration (number): Number in seconds of max session duration."
   default     = 3600
 }
+
+variable "managedPolicies" {
+  type        = list(any)
+  description = "managedPolicies (list): List of ARNs tied to externally (AWS or Custom) managed policies to attach to the generated role."
+  default     = []
+}

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run latest-tag
-        uses: thevanguardian/latest-tag@latest
+        uses: thevanguardian/latest-tag@v2.0.0
         with:
           # You can change the name of the tag with this input.
           # Default: 'latest'

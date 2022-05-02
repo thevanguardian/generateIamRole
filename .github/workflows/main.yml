@@ -8,9 +8,7 @@ jobs:
     name: Run local action
     runs-on: ubuntu-latest
     steps:
-      - name: Run latest-tag
-        uses: thevanguardian/latest-tag@v2.0.0
+      - name: Actions Tagger
+        uses: Actions-R-Us/actions-tagger@v2.0.2
         with:
-          # You can change the name of the tag with this input.
-          # Default: 'latest'
-          tag-name: latest
+          publish_latest_tag: true

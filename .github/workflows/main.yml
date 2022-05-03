@@ -1,4 +1,4 @@
-name: Add latest tag to new release
+name: Increment Release Tags
 on:
   release:
     types: [published]
@@ -14,6 +14,6 @@ jobs:
 
     steps:
       - name: Actions Tagger
-        uses: Actions-R-Us/actions-tagger@v2.0.2
+        uses: thevanguardian/actions-tagger@v2.0.2
         with:
           publish_latest_tag: true

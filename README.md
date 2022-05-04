@@ -19,7 +19,8 @@ Handles the creation of an IAM role in a standard fashion. It uses data sources 
 # Example Usage
 ```hcl
 module "this" {
-  source = "github.com/thevanguardian/generateIamRole?ref=<release_tag>" 
+  source = "thevanguardian/generateIamRole/aws"
+  version = "1.0.2"
   roleName = "AccessEKSMacGuffin" # Required
   rolePath = "/k8s/users/" # Required
   maxSessionDuration = 7200 # Optional

@@ -6,7 +6,8 @@ Handles the creation of an IAM role in a standard fashion. It uses data sources 
 
 ## Available Inputs
 - source (required, string): Expects a string identifying the modules location and release_tag to pull in.
-- roleName (required, string): Name to be assigned to the IAM Role.
+- roleName (required, string): Name to be assigned to the IAM Role. Conflicts with roleNamePrefix.
+- roleNamePrefix (required, string): Prefix for friendly generated name of the IAM Role. Conflicts with roleName.
 - rolePath (required, string): IAM Role path assignment, used to logical grouping of IAM roles.
 - managedPolicies (optional, list): AWS / Customer managed IAM policies to attach to the role.
 - maxSessionDuration (optional, number): Maximum session duration for IAM role assumption.

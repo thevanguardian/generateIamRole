@@ -1,5 +1,6 @@
 resource "aws_iam_role" "generatedRole" {
-  name                 = var.roleName
+  name                 = var.roleName != "" ? var.roleName : null
+  name_prefix          = var.roleNamePrefix != "" ? var.roleNamePrefix : null
   path                 = var.rolePath != "" ? var.rolePath : null
   max_session_duration = var.maxSessionDuration
   assume_role_policy   = data.aws_iam_policy_document.generatedAssumePolicy.json

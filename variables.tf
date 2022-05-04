@@ -24,16 +24,25 @@ variable "unscopedActions" {
 variable "assumeIdentifiers" {
   type        = list(any)
   description = "assumeIdentifiers (list): List of identifiers that are allowed to assume the generated role."
+  default     = []
 }
 
 variable "roleName" {
   type        = string
   description = "roleName (str): Identification name of the generated IAM Role."
+  default     = ""
+}
+
+variable "roleNamePrefix" {
+  type        = string
+  description = "roleNamePrefix (str): Prefix of a friendly generated name for the IAM Role."
+  default     = ""
 }
 
 variable "rolePath" {
   type        = string
   description = "rolePath (str): Logical path that the IAM Role will be stored in. (ex: '/system/')"
+  default     = ""
 }
 
 variable "maxSessionDuration" {

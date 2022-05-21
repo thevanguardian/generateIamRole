@@ -9,6 +9,12 @@ variable "scopedActions" {
   default     = []
 }
 
+variable "scopedConditions" {
+  type        = any
+  description = "scopedConditions (list): List of of maps setting test, variable, and value."
+  default     = []
+}
+
 variable "scopedResources" {
   type        = list(any)
   description = "scopedResources (list): List of resources that have the actions assigned during IAM policy generation"
@@ -20,12 +26,33 @@ variable "unscopedActions" {
   description = "unscopedActions (list): List of actions that are unscoped and have access to '*'."
   default     = []
 }
-
-variable "assumeIdentifiers" {
-  type        = list(any)
-  description = "assumeIdentifiers (list): List of identifiers that are allowed to assume the generated role."
+variable "unscopedConditions" {
+  type        = any
+  description = "unscopedConditions (list): List of of maps setting test, variable, and value."
   default     = []
 }
+
+variable "assumeConfig" {
+  type        = any
+  description = "assumeConfig (map): Map for type and list of identifiers."
+  default = {
+    type        = "Service"
+    identifiers = "ec2.amazonaws.com"
+  }
+}
+
+variable "assumeConditionConfig" {
+  type        = list(any)
+  description = "assumeConditionConfig (list): List of maps setting conditional IAM rules for assume role generation. Supports test (string), variable (string), values (string)."
+  default     = []
+}
+
+variable "policyConditionConfig" {
+  type        = list(any)
+  description = "policyConditionConfig (list): List of maps setting conditional IAM rules for policy generation. Supports test (string), variable (string), values (string)."
+  default     = []
+}
+
 
 variable "roleName" {
   type        = string

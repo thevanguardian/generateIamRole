@@ -42,7 +42,7 @@ variable "assumeConfig" {
 }
 
 variable "assumeConditionConfig" {
-  type        = list(any)
+  type        = any
   description = "assumeConditionConfig (list): List of maps setting conditional IAM rules for assume role generation. Supports test (string), variable (string), values (string)."
   default     = []
 }

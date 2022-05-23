@@ -1,8 +1,8 @@
 locals {
   enableUnscopedActions = length(var.unscopedActions) > 0 ? [1] : []
   enableScopedActions   = length(var.scopedActions) > 0 ? [1] : []
+  enableDenyActions     = length(var.denyActions) > 0 ? [1] : []
 }
-
 variable "scopedActions" {
   type        = list(any)
   description = "scopedActions (list): List of actions to pass to the IAM policy generation"
@@ -18,6 +18,24 @@ variable "scopedConditions" {
 variable "scopedResources" {
   type        = list(any)
   description = "scopedResources (list): List of resources that have the actions assigned during IAM policy generation"
+  default     = []
+}
+
+variable "denyActions" {
+  type        = list(any)
+  description = "denyActions (list): List of actions to pass to the IAM policy generation"
+  default     = []
+}
+
+variable "denyConditions" {
+  type        = any
+  description = "denyConditions (list): List of of maps setting test, variable, and value."
+  default     = []
+}
+
+variable "denyResources" {
+  type        = list(any)
+  description = "denyResources (list): List of resources that have the actions assigned during IAM policy generation"
   default     = []
 }
 
@@ -37,7 +55,7 @@ variable "assumeConfig" {
   description = "assumeConfig (map): Map for type and list of identifiers."
   default = {
     type        = "Service"
-    identifiers = "ec2.amazonaws.com"
+    identifiers = ["ec2.amazonaws.com"]
   }
 }
 

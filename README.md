@@ -25,6 +25,10 @@ Handles the creation of an IAM role in a standard fashion. It uses data sources 
 - scopedConditions (optional, any): List of maps setting policy conditions for the scoped resources.
 - unscopedActions (optional, list): Specific actions that have blanket access to all resources.
 - unscopedConditions (optional, any): List of maps setting policy conditions for '*' resources.
+- denyActions (optional, list): Specific IAM actions that are assigned to scopedResources.
+- denyResources (optional, list): Specific resources that are tied to scopedActions.
+- denyConditions (optional, any): List of maps setting policy conditions for the scoped resources.
+
 
 ### Input Formats
 
@@ -40,13 +44,33 @@ Handles the creation of an IAM role in a standard fashion. It uses data sources 
 - scopedConditions: [{ test = "StringLike", variable = "s3:prefix", values = ["this", "is", "test"] }]
 - unscopedActions: [ "Action1", "Action2" ]
 - unscopedConditions: [{ test = "StringLike", variable = "s3:prefix", values = ["this", "is", "test"] }]
+- denyActions: [ "Action1", "Action2" ]
+- denyResources: [ "ARN1", "ARN2" ]
+- denyConditions: [{ test = "StringLike", variable = "s3:prefix", values = ["this", "is", "test"] }]
 
 ## Example Usage
 
 ```hcl
+# Simple Usage
+module "simplethis" {
+  source         = "thevanguardian/generateIamRole/aws"
+  roleNamePrefix = "SimpleAccessMacGuffin"
+  scopedActions = [ # Optional
+    "sns:Publish",
+    "dms:StartTask"
+  ]
+  scopedResources = [ # Optional
+    "arn:aws:ecr:::repository/trill-of-joy"
+  ]
+  unscopedActions = [ # Optional
+    "s3:GetBuckets"
+  ]
+}
+
+# More Advanced Usage
 module "this" {
   source = "thevanguardian/generateIamRole/aws"
-  version = "1.0.2"
+  version = "1.1.2"
   roleName = "AccessEKSMacGuffin" # Required
   rolePath = "/k8s/users/" # Required
   maxSessionDuration = 7200 # Optional

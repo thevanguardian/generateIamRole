@@ -31,6 +31,33 @@ These are the formats for the available variables. Config variables do not requi
 # Simple Usage
 module "simplethis" {
   source         = "thevanguardian/generateIamRole/aws"
+  roleName = "SimpleAccessMacGuffin"
+  scopedConfig = {
+    actions = [
+      "dynamodb:BatchWriteItem",
+      "dynamodb:Describe*",
+      "dynamodb:DeleteItem",
+      "dynamodb:UpdateItem",
+      "s3:*",
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/prod-*",
+      "arn:aws:s3:::${deploy_bucket_name}",
+      "arn:aws:s3:::${deploy_bucket_name}/*",
+      "arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*"
+    ]
+  }
+}
+```
+
+```hcl
+# More Advanced Usage
+module "this" {
+  source = "thevanguardian/generateIamRole/aws"
+  version = "2.0.0"
   roleName = "AccessEKSMacGuffin" # Required
   rolePath = "/k8s/users/" # Required
   maxSessionDuration = 7200 # Optional

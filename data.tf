@@ -57,6 +57,22 @@ data "aws_iam_policy_document" "generatedUnscopedPolicy" {
       }
     }
   }
+  dynamic "statement" {
+    for_each = local.enableDenyActions
+    content {
+      sid       = "denyActions"
+      actions   = sort(var.denyActions)
+      resources = sort(var.denyResources)
+      dynamic "condition" {
+        for_each = var.denyConditions
+        content {
+          test     = condition.value["test"]
+          variable = condition.value["variable"]
+          values   = tolist(condition.value["values"])
+        }
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "generatedDenyPolicy" {

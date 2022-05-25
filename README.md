@@ -9,7 +9,6 @@ Dynamically generates IAM policies based on input variables, and generates an IA
 ## Details
 
 Handles the creation of an IAM role in a standard fashion. It uses data sources to generate IAM policy documents for both scoped (actions limited to specific resources) and unscoped (actions assigned to '*' resources), and attaches them to the IAM role as an in-line policy. It is possible to assign previously created and/or AWS managed IAM policies as well.
-
 Conditional blocks are also supported as part of the Config variables.
 
 ### Input Formats
@@ -32,32 +31,6 @@ These are the formats for the available variables. Config variables do not requi
 # Simple Usage
 module "simplethis" {
   source         = "thevanguardian/generateIamRole/aws"
-  roleName = "SimpleAccessMacGuffin"
-  scopedConfig = {
-    actions = [
-      "dynamodb:BatchWriteItem",
-      "dynamodb:Describe*",
-      "dynamodb:DeleteItem",
-      "dynamodb:UpdateItem",
-      "s3:*",
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    resources = [
-      "arn:aws:dynamodb:*:*:table/prod-*",
-      "arn:aws:s3:::${deploy_bucket_name}",
-      "arn:aws:s3:::${deploy_bucket_name}/*",
-      "arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*"
-    ]
-  }
-}
-```
-```hcl
-# More Advanced Usage
-module "this" {
-  source = "thevanguardian/generateIamRole/aws"
-  version = "2.0.0"
   roleName = "AccessEKSMacGuffin" # Required
   rolePath = "/k8s/users/" # Required
   maxSessionDuration = 7200 # Optional

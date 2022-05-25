@@ -1,13 +1,17 @@
+terraform {
+  experiments = [module_variable_optional_attrs]
+}
+
 data "aws_iam_policy_document" "generatedAssumePolicy" {
   statement {
     sid     = "AssumeRole"
-    actions = ["sts:AssumeRole"]
+    actions = var.assumeConfig["actions"]
     principals {
       type        = var.assumeConfig["type"]
       identifiers = var.assumeConfig["identifiers"]
     }
     dynamic "condition" {
-      for_each = toset(var.assumeConditionConfig)
+      for_each = var.assumeConfig["conditions"] != null ? var.assumeConfig["conditions"] : []
       content {
         test     = condition.value["test"]
         variable = condition.value["variable"]
@@ -17,15 +21,15 @@ data "aws_iam_policy_document" "generatedAssumePolicy" {
   }
 }
 
-data "aws_iam_policy_document" "generatedPolicy" {
+data "aws_iam_policy_document" "generatedScopedPolicy" {
   dynamic "statement" {
-    for_each = local.enableScopedActions
+    for_each = length(var.scopedConfig["actions"]) > 0 ? [1] : []
     content {
       sid       = "ScopedActions"
-      actions   = sort(var.scopedActions)
-      resources = sort(var.scopedResources)
+      actions   = var.scopedConfig["actions"]
+      resources = var.scopedConfig["resources"]
       dynamic "condition" {
-        for_each = var.scopedConditions
+        for_each = var.scopedConfig["conditions"] != null ? var.scopedConfig["conditions"] : []
         content {
           test     = condition.value["test"]
           variable = condition.value["variable"]
@@ -34,14 +38,17 @@ data "aws_iam_policy_document" "generatedPolicy" {
       }
     }
   }
+}
+
+data "aws_iam_policy_document" "generatedUnscopedPolicy" {
   dynamic "statement" {
-    for_each = local.enableUnscopedActions
+    for_each = length(var.unscopedConfig["actions"]) > 0 ? [1] : []
     content {
       sid       = "UnscopedActions"
-      actions   = sort(var.unscopedActions)
+      actions   = var.unscopedConfig["actions"]
       resources = ["*"]
       dynamic "condition" {
-        for_each = var.unscopedConditions
+        for_each = var.unscopedConfig["conditions"] != null ? var.unscopedConfig["conditions"] : []
         content {
           test     = condition.value["test"]
           variable = condition.value["variable"]
@@ -50,14 +57,18 @@ data "aws_iam_policy_document" "generatedPolicy" {
       }
     }
   }
+}
+
+data "aws_iam_policy_document" "generatedDenyPolicy" {
   dynamic "statement" {
-    for_each = local.enableDenyActions
+    for_each = length(var.denyConfig["actions"]) > 0 ? [1] : []
     content {
-      sid       = "denyActions"
-      actions   = sort(var.denyActions)
-      resources = sort(var.denyResources)
+      sid       = "Denials"
+      effect    = "Deny"
+      actions   = var.denyConfig["actions"]
+      resources = var.denyConfig["resources"]
       dynamic "condition" {
-        for_each = var.denyConditions
+        for_each = var.denyConfig["conditions"] != null ? var.denyConfig["conditions"] : []
         content {
           test     = condition.value["test"]
           variable = condition.value["variable"]
@@ -66,4 +77,12 @@ data "aws_iam_policy_document" "generatedPolicy" {
       }
     }
   }
+}
+
+data "aws_iam_policy_document" "generatedPolicy" {
+  source_policy_documents = flatten([
+    data.aws_iam_policy_document.generatedScopedPolicy[*].json,
+    data.aws_iam_policy_document.generatedUnscopedPolicy[*].json,
+    data.aws_iam_policy_document.generatedDenyPolicy[*].json
+  ])
 }

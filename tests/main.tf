@@ -36,24 +36,26 @@ module "Conditional" {
     actions     = ["sts:AssumeRole"]
     type        = "Service"
     identifiers = ["ec2.amazonaws.com"]
+    conditions = [
+      { test = "StringEquals", variable = "SAML:aud", values = ["https://signin.aws.amazon.com/saml"] }
+    ]
   }
-  assumeConditionConfig = [{
-    test     = "StringEquals"
-    variable = "SAML:aud"
-    values   = ["https://signin.aws.amazon.com/saml"]
-  }]
-  unscopedConditions = [
-    { test = "StringLike", variable = "s3:prefix", values = ["test", "meow"] },
-    { test = "StringNotLike", variable = "s3:prefix", values = ["hme/"] }
-  ]
-  scopedActions = [ # Optional
-    "sns:Publish",
-    "dms:StartTask"
-  ]
-  scopedResources = [ # Optional
-    "arn:aws:ecr:::repository/trill-of-joy"
-  ]
-  unscopedActions = [ # Optional
-    "s3:GetBuckets"
-  ]
+  scopedConfig = {
+    actions = [
+      "dynamodb:UpdateItem",
+      "s3:*",
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:s3:::${deploy_bucket_name}/*",
+      "arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*"
+    ]
+  }
+  unscopedConfig = {
+    actions = [
+      "s3:*"
+    ]
+  }
 }

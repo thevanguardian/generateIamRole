@@ -49,7 +49,7 @@ module "Conditional" {
       "logs:PutLogEvents"
     ]
     resources = [
-      "arn:aws:s3:::${deploy_bucket_name}/*",
+      "arn:aws:s3:::s3-bucket-name/*",
       "arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*"
     ]
   }

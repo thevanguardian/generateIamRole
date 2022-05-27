@@ -1,30 +1,69 @@
-locals {
-  enableUnscopedActions = length(var.unscopedActions) > 0 ? [1] : []
-  enableScopedActions   = length(var.scopedActions) > 0 ? [1] : []
+variable "assumeConfig" {
+  type = object({
+    actions     = list(any)
+    type        = string
+    identifiers = list(any)
+    conditions = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(any)
+    })))
+  })
+  description = "assumeConfig (map): Map of configuration items to pass to the assume role policy generation."
+  default = {
+    actions     = ["sts:AssumeRole"]
+    type        = "Service"
+    identifiers = ["ec2.amazonaws.com"]
+  }
 }
 
-variable "scopedActions" {
-  type        = list(any)
-  description = "scopedActions (list): List of actions to pass to the IAM policy generation"
-  default     = []
+variable "scopedConfig" {
+  type = object({
+    actions   = list(any)
+    resources = list(any)
+    conditions = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(any)
+    })))
+  })
+  description = "scopedConfig (map): Map of configuration items to pass to the role policy that's scoped to specific resources."
+  default = {
+    actions   = []
+    resources = []
+  }
 }
 
-variable "scopedResources" {
-  type        = list(any)
-  description = "scopedResources (list): List of resources that have the actions assigned during IAM policy generation"
-  default     = []
+variable "unscopedConfig" {
+  type = object({
+    actions = list(any)
+    conditions = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(any)
+    })))
+  })
+  description = "unscopedConfig (map): Map of configuration items to pass to the role policy that's unscoped and targeting '*'."
+  default = {
+    actions = []
+  }
 }
 
-variable "unscopedActions" {
-  type        = list(any)
-  description = "unscopedActions (list): List of actions that are unscoped and have access to '*'."
-  default     = []
-}
-
-variable "assumeIdentifiers" {
-  type        = list(any)
-  description = "assumeIdentifiers (list): List of identifiers that are allowed to assume the generated role."
-  default     = []
+variable "denyConfig" {
+  type = object({
+    actions   = list(any)
+    resources = list(any)
+    conditions = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(any)
+    })))
+  })
+  description = "denyConfig (map): Map of configuration items to pass to the role policy that's unscoped and targeting '*'."
+  default = {
+    actions   = []
+    resources = []
+  }
 }
 
 variable "roleName" {

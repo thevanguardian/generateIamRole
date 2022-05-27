@@ -5,8 +5,11 @@ resource "aws_iam_role" "generatedRole" {
   max_session_duration = var.maxSessionDuration
   assume_role_policy   = data.aws_iam_policy_document.generatedAssumePolicy.json
   managed_policy_arns  = length(var.managedPolicies) > 0 ? var.managedPolicies : null
-  inline_policy {
-    name   = "GeneratedPolicy"
-    policy = data.aws_iam_policy_document.generatedPolicy.json
+  dynamic "inline_policy" {
+    for_each = local.enableInlinePolicy ? toset([1]) : []
+    content {
+      name   = "GeneratedPolicy"
+      policy = data.aws_iam_policy_document.generatedPolicy.json
+    }
   }
 }

@@ -1,8 +1,7 @@
-
 terraform {
   required_providers {
-    aws = {
-      source = "hashicorp/aws"
+    test = {
+      source = "terraform.io/builtin/test"
     }
   }
 }
@@ -10,12 +9,12 @@ provider "aws" {
   region = "us-east-1"
 }
 module "ManagedPolicies" {
-  source          = "../"
+  source          = "../.."
   roleNamePrefix  = "ManagedPoliciesBuild"
   managedPolicies = ["arn:aws:iam::aws:policy/AutoScalingReadOnlyAccess"]
 }
 module "BasicScoped" {
-  source   = "../"
+  source   = "../.."
   roleName = "BasicScoped"
   assumeConfig = {
     actions     = ["sts:AssumeRole"]
@@ -38,7 +37,7 @@ module "BasicScoped" {
 }
 
 module "Conditional" {
-  source             = "../"
+  source             = "../.."
   roleName           = "AccessEKSMacGuffin" # Required
   rolePath           = "/system/"           # Required
   maxSessionDuration = 7200                 # Optional

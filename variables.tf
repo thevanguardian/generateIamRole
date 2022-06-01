@@ -1,3 +1,6 @@
+locals {
+  enableInlinePolicy = length(var.scopedConfig["actions"]) > 0 || length(var.scopedConfig["actions"]) > 0 || length(var.denyConfig["actions"]) > 0 ? true : false
+}
 variable "assumeConfig" {
   type = object({
     actions     = list(any)

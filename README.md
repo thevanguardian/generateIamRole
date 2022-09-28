@@ -95,7 +95,7 @@ module "this" {
       "dms:StartTask"
     ]
     conditions = [
-      { test = "StringLike", variable = "s3:prefix", values = ["test", "meow"] },
+      { test = "StringLike", variable = "s3:prefix", values = ["this", "that"] },
       { test = "StringNotLike", variable = "s3:prefix", values = ["hme/"] }
     ]
   }

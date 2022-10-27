@@ -1,3 +1,6 @@
+terraform {
+  required_version = "~> 1.3"
+}
 data "aws_iam_policy_document" "generatedAssumePolicy" {
   statement {
     sid     = "AssumeRole"

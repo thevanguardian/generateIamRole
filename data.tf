@@ -1,7 +1,3 @@
-terraform {
-  experiments = [module_variable_optional_attrs]
-}
-
 data "aws_iam_policy_document" "generatedAssumePolicy" {
   statement {
     sid     = "AssumeRole"
